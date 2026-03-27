@@ -1,5 +1,11 @@
 # Learn-Anything
 
+**[English](#learn-anything-1) · [中文](#learn-anything中文)**
+
+---
+
+<a name="learn-anything-1"></a>
+
 **A universal AI skill that transforms any content into a complete, adaptive learning system.**
 
 Works with any AI agent: Claude Code, Codex, Gemini, OpenClaw, or any LLM that accepts system prompts.
@@ -110,20 +116,21 @@ For better source collection during knowledge base construction, install [omni-s
 
 ## In-Session Commands
 
-| Command | Action |
+| Command (EN / 中文) | Action / 动作 |
 |---|---|
-| `更简单点` / `make it easier` | Activate Make It Easier mode |
-| `skip` / `跳过` | Skip current concept or module |
-| `deeper` / `展开` | Go deeper on current topic |
-| `assess` / `测试我` | Jump to module assessment |
-| `pause` / `暂停` | Save progress and end session |
-| `map` / `进度` | Show learning map with progress |
-| `复习计划` | View spaced repetition schedule |
-| `导出笔记` | Export learning notes as Markdown |
-| `切换音频` | Switch to audio mode (requires NotebookLM) |
-| `connections` / `知识地图` | Show cross-concept relationship map |
+| `make it easier` / `更简单点` | Activate Make It Easier mode / 触发简化模式 |
+| `skip` / `跳过` | Skip current concept or module / 跳过当前概念或模块 |
+| `deeper` / `展开` | Go deeper on current topic / 当前概念深入讲解 |
+| `assess` / `测试我` | Jump to module assessment / 立即进入模块测评 |
+| `pause` / `暂停` | Save progress and end session / 保存进度，结束学习 |
+| `map` / `进度` | Show learning map with progress / 显示整体学习进度 |
+| `review schedule` / `复习计划` | View spaced repetition schedule / 查看复习队列 |
+| `export notes` / `导出笔记` | Export learning notes as Markdown / 导出学习笔记 |
+| `audio mode` / `切换音频` | Switch to audio mode (requires NotebookLM) / 切换音频模式 |
+| `connections` / `知识地图` | Show cross-concept relationship map / 显示概念关联图谱 |
+| `reset` / `重置模块` | Reset current module and restart / 重置当前模块 |
 
-Natural language equivalents work too (e.g., "go deeper", "I don't get this", "show my progress").
+Natural language equivalents work too (e.g., "go deeper", "I don't get this", "show my progress" / "讲深一点"、"我听不懂"、"给我看看进度").
 
 ---
 
@@ -148,6 +155,8 @@ MIT
 
 ---
 ---
+
+<a name="learn-anything中文"></a>
 
 # Learn-Anything（中文）
 
@@ -249,20 +258,21 @@ nlm login
 
 ## 会话内命令
 
-| 命令 | 动作 |
+| 命令（英文 / 中文） | 动作 |
 |---|---|
-| `更简单点` / `make it easier` | 触发 Make It Easier 模式 |
-| `跳过` / `skip` | 跳过当前概念或模块 |
-| `展开` / `deeper` | 当前概念深入讲解 |
-| `测试我` / `assess` | 立即进入当前模块测评 |
-| `暂停` / `pause` | 保存进度，结束本次 session |
-| `进度` / `map` | 显示整体学习进度 |
-| `复习计划` | 查看复习队列和到期时间 |
-| `导出笔记` | 导出学习笔记为 Markdown |
-| `切换音频` | 切换到音频模式（需 NotebookLM）|
-| `知识地图` / `connections` | 显示已学概念关联图谱 |
+| `make it easier` / `更简单点` | 触发 Make It Easier 简化模式 |
+| `skip` / `跳过` | 跳过当前概念或模块 |
+| `deeper` / `展开` | 当前概念深入讲解 |
+| `assess` / `测试我` | 立即进入当前模块测评 |
+| `pause` / `暂停` | 保存进度，结束本次 session |
+| `map` / `进度` | 显示整体学习进度 |
+| `review schedule` / `复习计划` | 查看复习队列和到期时间 |
+| `export notes` / `导出笔记` | 导出学习笔记为 Markdown |
+| `audio mode` / `切换音频` | 切换到音频模式（需 NotebookLM）|
+| `connections` / `知识地图` | 显示已学概念关联图谱 |
+| `reset` / `重置模块` | 重置当前模块，从头学习 |
 
-自然语言等效表达均可识别（如「讲深一点」「我听不懂」「给我看看进度」）。
+自然语言等效表达均可识别（如「讲深一点」「我听不懂」「给我看看进度」/ "go deeper", "I don't get this", "show my progress"）。
 
 ---
 
