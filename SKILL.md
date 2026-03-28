@@ -66,6 +66,24 @@ argument-hint: "[resume | go over | <主题/URL/文件路径>]"
 - 若有多个进行中 → 列出让用户选择（最多显示 5 个）
 - 若无任何进行中 → 提示「没有进行中的学习」，展示启动菜单
 
+**断点恢复路由**（读取进度文件的 `current_phase` 字段后按以下规则跳转）：
+
+| `current_phase` 值 | 恢复位置 | 说明 |
+|---|---|---|
+| `phase-1-complete` | Phase 2 开头 | 来源已收集，从存储方式选择开始 |
+| `phase-2-complete` | Phase 2.5 开头 | 存储已配置，从领域智识地图开始 |
+| `phase-2.5-complete` | Phase 3 开头 | 智识地图已生成，从学习地图生成开始 |
+| `phase-3-complete` | Phase 5 开头（第一个模块） | 学习地图已生成，从第一个模块开始 |
+| `module-N-in-progress` | Phase 5 该模块 | 恢复模块 N 的学习 |
+| `null` 或缺失 | 提示用户该知识库尚无断点记录，询问是否从头开始 |
+
+恢复时展示简短的上下文提示，例如：
+```
+🔄 继续「[知识库名]」
+上次停在：已完成来源收集（12 个来源，整体评级 B+）
+从「存储方式选择」继续...
+```
+
 **`go over` 行为细则**：
 - 读取所有知识库进度文件，收集今日到期的复习模块（R1-R4）
 - 若有到期模块 → 按到期优先级排列，直接进入复习循环
@@ -176,6 +194,11 @@ D. 查看成就
 继续补充来源，还是直接进入下一步？
 ```
 
+**⚑ Phase 1 完成后立即写入断点**（不等用户确认，展示报告后同步执行）：
+- 创建或更新 `progress/{kb-slug}.md`：写入来源列表、frontmatter 基础字段、`断点.current_phase: phase-1-complete`
+- 在 `progress/index.md` 中添加或更新该知识库条目（status: in_progress）
+- 这确保此后任意时刻 `/learn resume` 都能从 Phase 2 恢复
+
 ---
 
 ## Phase 2：知识库存储
@@ -233,6 +256,11 @@ B. 本次使用本地存储继续（文字功能完整，无音频）
    - URL / YouTube：`source_type="url"`
    - Google Drive：`source_type="drive"`
 
+**⚑ Phase 2 完成后立即写入断点**（存储方式确认 / 上传完成后执行）：
+- 更新进度文件 `storage_type` 字段（`notebooklm` 或 `local`）
+- 若 NotebookLM：写入 `notebook_id`
+- 更新 `断点.current_phase: phase-2-complete`
+
 ---
 
 ## Phase 2.5：领域智识地图
@@ -267,6 +295,10 @@ B. 本次使用本地存储继续（文字功能完整，无音频）
 → 保存到进度文件，作为后续综合测评的题库基础
 
 将三个查询结果保存到进度文件的 `intellectual_map` 字段。
+
+**⚑ Phase 2.5 完成后立即写入断点**：
+- 将三个查询结果持久化到进度文件
+- 更新 `断点.current_phase: phase-2.5-complete`
 
 ---
 
@@ -328,6 +360,11 @@ B. 本次使用本地存储继续（文字功能完整，无音频）
 ```
 
 用户可选：推荐顺序（默认）/ 自定义顺序 / 跳过指定模块。前置依赖冲突时警告但不阻止。
+
+**⚑ Phase 3 完成后立即写入断点**（用户确认学习地图/顺序后执行）：
+- 将完整模块列表写入进度文件（所有模块 status: not_started）
+- 更新 `学习统计.total_modules`
+- 更新 `断点.current_phase: phase-3-complete`
 
 ---
 
@@ -945,9 +982,9 @@ total_study_time_minutes: 0
 - total_study_time_minutes: 0
 
 ## 断点
-- current_module: null
-- current_concept: null
-- current_phase: null
+- current_module: null        # 正在学习的模块编号（整数），或 null
+- current_concept: null       # 正在学习的概念名，或 null
+- current_phase: null         # 有效值: phase-1-complete | phase-2-complete | phase-2.5-complete | phase-3-complete | module-N-in-progress | null
 
 ## 学习笔记
 
