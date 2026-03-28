@@ -266,12 +266,21 @@ B. 本次使用本地存储继续（文字功能完整，无音频）
 
 ### 2.3 NotebookLM 操作流程（用户选择后执行）
 
-1. 调用 `notebook_create`，保存 `notebook_id` 到进度文件
-2. 循环调用 `source_add` 上传所有 A/B 级来源，每次设 `wait=true`：
-   - 本地文件（PDF/TXT）：`source_type="file"`
-   - EPUB：先用 epub2txt 转换为 txt，再上传
-   - URL / YouTube：`source_type="url"`
-   - Google Drive：`source_type="drive"`
+> **注意**：NotebookLM 目前没有开放创建 notebook 和上传来源的 API。以下步骤需要用户在浏览器手动完成，agent 负责准备材料和后续查询。
+
+**Agent 准备（自动）**：
+- 将所有 A/B 级来源整理为清单，含 URL 列表和需上传的本地文件路径
+- 若有本地文件，转换为可上传格式（EPUB → txt）
+
+**用户手动操作（需在浏览器完成）**：
+1. 打开 https://notebooklm.google.com，点击 **+ New** 创建新 notebook
+2. 添加来源：URL 直接粘贴，本地文件点击上传
+3. 创建完成后，复制 notebook 的**分享链接**发给 agent
+
+**Agent 接管（收到链接后）**：
+- 从链接提取 notebook ID，保存到进度文件
+- 通过 `nlm` 工具对 notebook 执行智识地图查询（Phase 2.5）
+- 后续按模块调用 `studio_create` 生成音频（需 NotebookLM Studio）
 
 **⚑ Phase 2 完成后立即写入断点**（存储方式确认 / 上传完成后执行）：
 - 更新进度文件 `storage_type` 字段（`notebooklm` 或 `local`）
