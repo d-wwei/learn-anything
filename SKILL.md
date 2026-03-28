@@ -180,27 +180,58 @@ D. 查看成就
 
 ## Phase 2：知识库存储
 
+**此步骤不可跳过，不可静默决定。必须主动检查后明确告知用户。**
+
+### 2.1 主动检查 NotebookLM 可用性
+
+在向用户展示选项之前，先检测环境：
+
+- 尝试调用 `notebooklm-mcp-cli` 或执行 `nlm status`
+- 若成功响应 → NotebookLM **可用**
+- 若命令不存在或返回未登录错误 → NotebookLM **不可用**
+
+### 2.2 根据检测结果展示存储选项
+
+**情况 A：NotebookLM 可用**
+
 ```
-选择知识库存储方式：
+检测到 NotebookLM 已配置 ✅
+
+请选择知识库存储方式：
 
 A. NotebookLM（推荐）
-   优势：AI 基于真实上传内容作答，幻觉率更低；支持音频生成
-   前提：需已安装 notebooklm-mcp-cli 并完成 nlm login
+   优势：AI 基于真实上传内容作答，幻觉率更低；支持按模块生成音频
+   → 所有 A/B 级来源将上传到 notebook
 
 B. 本地存储
    优势：无需外部服务，完全离线可用
    局限：文字内容由 AI 直接生成；无音频功能
 ```
 
-**NotebookLM 操作流程**：
+**情况 B：NotebookLM 不可用**
+
+```
+⚠️  未检测到 NotebookLM（notebooklm-mcp-cli 未安装或未登录）
+
+NotebookLM 可以显著降低学习内容的幻觉率，并支持音频生成。
+安装方式：pip install notebooklm-mcp-cli && nlm login
+
+请选择：
+
+A. 现在去配置 NotebookLM（完成后返回继续）
+B. 本次使用本地存储继续（文字功能完整，无音频）
+```
+
+不得在未告知用户的情况下静默选择本地存储。
+
+### 2.3 NotebookLM 操作流程（用户选择后执行）
+
 1. 调用 `notebook_create`，保存 `notebook_id` 到进度文件
 2. 循环调用 `source_add` 上传所有 A/B 级来源，每次设 `wait=true`：
    - 本地文件（PDF/TXT）：`source_type="file"`
    - EPUB：先用 epub2txt 转换为 txt，再上传
    - URL / YouTube：`source_type="url"`
    - Google Drive：`source_type="drive"`
-
-**降级策略**：NotebookLM 未配置时，自动选择本地存储，告知用户音频功能不可用，其他功能完全正常。
 
 ---
 
