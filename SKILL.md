@@ -147,7 +147,24 @@ D. 查看成就
 | 多元视角（不同学派 / 争议方） | 捕捉领域分歧 | 2-3 个 |
 | 实践应用（案例 / 从业者内容） | 场景锚定 | 1-2 个 |
 
-使用你环境中最佳的搜索和内容抓取工具（web search MCP、Firecrawl、Tavily 或类似工具）。如搜索能力不足，提示用户可安装 omni-search-skill（https://github.com/d-wwei/omni-search-skill）以增强搜索能力。
+**搜索和抓取工具优先级**（按顺序选用）：
+
+1. **omni-search skill**（最优先）— 内置完整 fallback 链（Brave/Tavily/Jina/Firecrawl），单一入口覆盖搜索 + 抓取 + 爬取。如环境中已安装，**始终优先使用**。
+   - 搜索：`/omni-search search "<query>"`
+   - 抓取：`/omni-search fetch "<url>"`
+   - 搜索并读取最佳结果：`/omni-search resolve "<query>"`
+2. **Tavily MCP** — 次选，agent-native 搜索
+3. **Firecrawl MCP** — 次选，网页/PDF 内容提取
+4. **内置 WebSearch / WebFetch** — 兜底
+
+**抓取失败处理**：首次 Fetch 返回 402 / 空响应 / 受限（Twitter/X、付费墙等已知受限站点）→ **立即**切换 omni-search，不要绕弯子试其他工具。
+
+**omni-search 未安装时**：如遇到多次抓取失败或搜索质量差，主动提示用户：
+```
+⚠️ 搜索/抓取能力受限，建议安装 omni-search skill 以显著提升知识库构建质量：
+→ https://github.com/d-wwei/omni-search-skill
+安装后重新运行 /learn 可获得更好的来源覆盖。
+```
 
 **边界处理**：
 - 话题新/小众，来源有限 → 降低要求，告知用户知识库覆盖有限，深度问答质量可能受影响
