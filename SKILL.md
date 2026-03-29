@@ -149,21 +149,25 @@ D. 查看成就
 
 **搜索和抓取工具优先级**（按顺序选用）：
 
-1. **omni-search skill**（最优先）— 内置完整 fallback 链（Brave/Tavily/Jina/Firecrawl），单一入口覆盖搜索 + 抓取 + 爬取。如环境中已安装，**始终优先使用**。
-   - 搜索：`/omni-search search "<query>"`
-   - 抓取：`/omni-search fetch "<url>"`
-   - 搜索并读取最佳结果：`/omni-search resolve "<query>"`
-2. **Tavily MCP** — 次选，agent-native 搜索
-3. **Firecrawl MCP** — 次选，网页/PDF 内容提取
-4. **内置 WebSearch / WebFetch** — 兜底
+1. **omni-search**（最优先）— 内置完整 fallback 链（Brave/Tavily/Jina/Firecrawl），单一入口覆盖搜索 + 抓取 + 爬取。如环境中已安装，**始终优先使用**：
+   ```bash
+   # 搜索
+   python3 <omni-search-dir>/scripts/omni_search.py search "<query>"
+   # 抓取页面
+   python3 <omni-search-dir>/scripts/omni_search.py fetch "<url>"
+   # 搜索并读取最佳结果
+   python3 <omni-search-dir>/scripts/omni_search.py resolve "<query>"
+   ```
+2. **Tavily / Firecrawl**（若环境提供）— 次选，agent-native 搜索与抓取
+3. **内置 WebSearch / WebFetch** — 兜底
 
 **抓取失败处理**：首次 Fetch 返回 402 / 空响应 / 受限（Twitter/X、付费墙等已知受限站点）→ **立即**切换 omni-search，不要绕弯子试其他工具。
 
 **omni-search 未安装时**：如遇到多次抓取失败或搜索质量差，主动提示用户：
 ```
-⚠️ 搜索/抓取能力受限，建议安装 omni-search skill 以显著提升知识库构建质量：
+⚠️ 搜索/抓取能力受限，建议安装 omni-search 以显著提升知识库构建质量：
 → https://github.com/d-wwei/omni-search-skill
-安装后重新运行 /learn 可获得更好的来源覆盖。
+安装后重新运行 /learn（或在你的 agent 中重新调用本 skill）即可获得更好的来源覆盖。
 ```
 
 **边界处理**：
@@ -226,9 +230,11 @@ D. 查看成就
 
 在向用户展示选项之前，先检测环境：
 
-- 尝试调用 `notebooklm-mcp-cli` 或执行 `nlm status`
-- 若成功响应 → NotebookLM **可用**
-- 若命令不存在或返回未登录错误 → NotebookLM **不可用**
+- 检查 `nlm` CLI 是否可用（执行 `nlm status` 或 `nlm --version`）
+- 或检查环境中是否提供了 NotebookLM 相关工具/接口（工具名通常含 `notebooklm`）
+- 若检测成功 → NotebookLM **可用**
+- 若未找到任何相关工具 → NotebookLM **不可用**
+- 本检测逻辑与具体 agent 平台无关，适用于 Claude Code、Codex、Gemini 等任意环境
 
 ### 2.2 根据检测结果展示存储选项
 
@@ -251,10 +257,10 @@ B. 本地存储
 **情况 B：NotebookLM 不可用**
 
 ```
-⚠️  未检测到 NotebookLM（notebooklm-mcp-cli 未安装或未登录）
+⚠️  未检测到 NotebookLM（nlm CLI 未安装或未登录）
 
 NotebookLM 可以显著降低学习内容的幻觉率，并支持音频生成。
-安装方式：pip install notebooklm-mcp-cli && nlm login
+安装方式（任意 agent 环境均适用）：pip install notebooklm-mcp-cli && nlm login
 
 请选择：
 
@@ -279,8 +285,8 @@ B. 本次使用本地存储继续（文字功能完整，无音频）
 
 **Agent 接管（收到链接后）**：
 - 从链接提取 notebook ID，保存到进度文件
-- 通过 `nlm` 工具对 notebook 执行智识地图查询（Phase 2.5）
-- 后续按模块调用 `studio_create` 生成音频（需 NotebookLM Studio）
+- 通过 `nlm query` 或环境中可用的 NotebookLM 接口对 notebook 执行智识地图查询（Phase 2.5）
+- 后续按模块触发音频生成（通过 `nlm studio` 或环境提供的 NotebookLM Studio 接口）
 
 **⚑ Phase 2 完成后立即写入断点**（存储方式确认 / 上传完成后执行）：
 - 更新进度文件 `storage_type` 字段（`notebooklm` 或 `local`）
