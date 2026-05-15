@@ -24,11 +24,12 @@ Give it a topic, URL, PDF, or pasted text. It will:
    - **Anti-pattern** — common mistake, why it's tempting, correct approach
    - **Practice scenario** — realistic situation requiring judgment
 5. **Calibrate your level** — self-assessment + optional 3-minute quiz to verify actual depth
-6. **Make It Easier on demand** — analogies, historical context, simplified versions, prerequisite mini-lessons, 5-year-old explanations
-7. **Diagnose errors** — 3-step diagnosis on every wrong answer: what assumption was wrong, what key premise was missing, which type of misconception
-8. **Track progress** — persistent progress files across sessions, resume from any breakpoint
-9. **Run spaced repetition** — Ebbinghaus-curve review schedule (R1/R2/R3/R4) per module
-10. **Award achievements** — milestone celebrations after each module, randomized badge on knowledge base completion
+6. **Make It Easier on demand** — analogies, historical context, simplified versions, prerequisite mini-lessons, first-person intuition, and formal boundaries
+7. **Dissect concepts on demand** — definition anchoring, common misconceptions, eight exploration dimensions, and compressed concept cards
+8. **Diagnose errors** — 3-step diagnosis on every wrong answer: what assumption was wrong, what key premise was missing, which type of misconception
+9. **Track progress** — persistent progress files across sessions, resume from any breakpoint
+10. **Run spaced repetition** — Ebbinghaus-curve review schedule (R1/R2/R3/R4) per module
+11. **Award achievements** — milestone celebrations after each module, randomized badge on knowledge base completion
 
 ---
 
@@ -40,7 +41,8 @@ Give it a topic, URL, PDF, or pasted text. It will:
 | **Expert lens first** | Before any teaching: maps expert mental models, field debates, and generates diagnostic questions |
 | **Adaptive depth** | Teaching depth adjusts per module based on calibrated level, not just self-rating |
 | **Anti-pattern teaching** | Each concept is taught, then stress-tested with the most tempting wrong approach |
-| **Make It Easier mode** | 5 strategies (analogy / history / minimal version / prerequisite patch / 5yo) for breaking through difficulty walls |
+| **Make It Easier mode** | 7 strategies (analogy / history / minimal version / prerequisite patch / 5yo / first-person intuition / formal boundary) for breaking through difficulty walls |
+| **Concept anatomy** | Optional deep-dive mode: anchor the definition, expose misconceptions, slice through 8 dimensions, then compress into a reviewable card |
 | **3-step error diagnosis** | Wrong answers reveal: false assumption → missing premise → misconception type |
 | **Spaced repetition** | 4-round review schedule baked into every module's completion |
 | **Session persistence** | Full progress state saved; resume from exact breakpoint across sessions |
@@ -57,6 +59,7 @@ Give it a topic, URL, PDF, or pasted text. It will:
 | **Targeted** | Specify module numbers at start |
 | **Exam sprint** | Re-study after completion, focuses weak modules |
 | **Make It Easier** | Any time — triggered by command or repeated wrong answers |
+| **Concept anatomy** | `concept <term>`, `dissect <term>`, `概念解剖 <概念>`, or repeated concept-confusion errors |
 
 ---
 
@@ -79,6 +82,7 @@ Invoke with:
 /learn-anything Kubernetes networking
 /learn-anything https://docs.example.com/guide
 /learn-anything ~/papers/attention-is-all-you-need.pdf
+/learn-anything concept entropy
 /learn-anything resume
 ```
 
@@ -121,11 +125,14 @@ For better source collection during knowledge base construction, install [omni-s
 | `make it easier` / `更简单点` | Activate Make It Easier mode / 触发简化模式 |
 | `skip` / `跳过` | Skip current concept or module / 跳过当前概念或模块 |
 | `deeper` / `展开` | Go deeper on current topic / 当前概念深入讲解 |
+| `concept <term>` / `概念解剖 <概念>` | Dissect a concept and generate a compressed concept card / 解剖概念并生成压缩卡片 |
 | `assess` / `测试我` | Jump to module assessment / 立即进入模块测评 |
 | `pause` / `暂停` | Save progress and end session / 保存进度，结束学习 |
 | `map` / `进度` | Show learning map with progress / 显示整体学习进度 |
 | `review schedule` / `复习计划` | View spaced repetition schedule / 查看复习队列 |
 | `export notes` / `导出笔记` | Export learning notes as Markdown / 导出学习笔记 |
+| `export concepts` / `导出概念卡片` | Export all concept anatomy cards / 导出概念解剖卡片 |
+| `export org` / `导出 org` | Export notes or concept cards as org-mode / 导出 org-mode |
 | `audio mode` / `切换音频` | Switch to audio mode (requires NotebookLM) / 切换音频模式 |
 | `connections` / `知识地图` | Show cross-concept relationship map / 显示概念关联图谱 |
 | `reset` / `重置模块` | Reset current module and restart / 重置当前模块 |
@@ -143,6 +150,8 @@ progress/
   index.md              # Global index of all knowledge bases
   {kb-slug}.md          # Per-knowledge-base progress file
   {kb-slug}-notes.md    # Exported learning notes
+  {kb-slug}-concepts.md # Exported concept anatomy cards
+  standalone-concepts.md # Concept anatomy records without a knowledge base
 ```
 
 Each progress file tracks: module status, self-rating vs actual score, calibration state, weak concepts, review schedule (R1–R4), study time, and session breakpoint.
@@ -178,11 +187,12 @@ MIT
    - **反模式** — 常见错误 + 为什么诱人 + 正确做法
    - **场景练习** — 需要你做判断的现实情境
 5. **精准水平校准** — 用户自评 + 可选 3 分钟快速测验，以实际测验结果驱动教学深度
-6. **Make It Easier 模式** — 类比 / 历史溯源 / 最小化版本 / 前置知识补课 / 5岁版解释，随时可触发
-7. **三步错题诊断** — 每道错题：错误假设是什么 → 漏了什么关键前提 → 误区类型（概念混淆/前置缺口/场景判断）
-8. **进度持久化** — 完整进度跨会话保存，随时从断点恢复
-9. **间隔复习** — 基于艾宾浩斯曲线的 R1/R2/R3/R4 复习计划，内置于每个模块
-10. **成就激励** — 每个模块完成后的里程碑庆祝 + 知识库完成时的随机勋章（含详细学习统计）
+6. **Make It Easier 模式** — 类比 / 历史溯源 / 最小化版本 / 前置知识补课 / 5岁版解释 / 第一人称内观 / 形式化边界，随时可触发
+7. **概念解剖模式** — 定义定锚、常见误解、八维切面、内观和压缩卡片，专门攻克抽象/易混淆概念
+8. **三步错题诊断** — 每道错题：错误假设是什么 → 漏了什么关键前提 → 误区类型（概念混淆/前置缺口/场景判断）
+9. **进度持久化** — 完整进度跨会话保存，随时从断点恢复
+10. **间隔复习** — 基于艾宾浩斯曲线的 R1/R2/R3/R4 复习计划，内置于每个模块
+11. **成就激励** — 每个模块完成后的里程碑庆祝 + 知识库完成时的随机勋章（含详细学习统计）
 
 ---
 
@@ -194,7 +204,8 @@ MIT
 | **专家视角优先** | 教学前先建立：专家心智模型 + 领域争议地图 + 诊断性问题集 |
 | **自适应深度** | 教学深度由校准后的实际水平驱动，不完全依赖主观自评 |
 | **反模式教学** | 每个概念：讲清楚什么是对的，也讲清楚什么是错的、为什么诱人 |
-| **Make It Easier** | 5 种策略应对认知瓶颈，任何时候可触发 |
+| **Make It Easier** | 7 种策略应对认知瓶颈，任何时候可触发 |
+| **概念解剖** | 可选深挖模式：定锚定义、暴露误区、八维切开，再压缩成可复习卡片 |
 | **三步错题诊断** | 不只给答案，找到思维缺口的根源 |
 | **间隔复习** | 每个模块完成后自动计算 4 轮复习时间，防止遗忘 |
 | **进度持久化** | 全状态保存，跨会话断点续学 |
@@ -221,6 +232,7 @@ cp SKILL.md .claude/skills/learn-anything/
 /learn-anything 分布式系统共识算法
 /learn-anything https://kubernetes.io/docs/concepts/
 /learn-anything ~/papers/attention-is-all-you-need.pdf
+/learn-anything 概念解剖 熵
 /learn-anything resume
 ```
 
@@ -263,11 +275,14 @@ nlm login
 | `make it easier` / `更简单点` | 触发 Make It Easier 简化模式 |
 | `skip` / `跳过` | 跳过当前概念或模块 |
 | `deeper` / `展开` | 当前概念深入讲解 |
+| `concept <term>` / `概念解剖 <概念>` | 解剖概念并生成压缩卡片 |
 | `assess` / `测试我` | 立即进入当前模块测评 |
 | `pause` / `暂停` | 保存进度，结束本次 session |
 | `map` / `进度` | 显示整体学习进度 |
 | `review schedule` / `复习计划` | 查看复习队列和到期时间 |
 | `export notes` / `导出笔记` | 导出学习笔记为 Markdown |
+| `export concepts` / `导出概念卡片` | 导出概念解剖卡片 |
+| `export org` / `导出 org` | 导出 org-mode 笔记或概念卡片 |
 | `audio mode` / `切换音频` | 切换到音频模式（需 NotebookLM）|
 | `connections` / `知识地图` | 显示已学概念关联图谱 |
 | `reset` / `重置模块` | 重置当前模块，从头学习 |
@@ -285,6 +300,8 @@ progress/
   index.md              # 全局知识库索引
   {kb-slug}.md          # 每个知识库的进度文件（含模块状态/得分/复习计划/断点）
   {kb-slug}-notes.md    # 导出的学习笔记
+  {kb-slug}-concepts.md # 导出的概念解剖卡片
+  standalone-concepts.md # 无知识库时的概念解剖记录
 ```
 
 ---
